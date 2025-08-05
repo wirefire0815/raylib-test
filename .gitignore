@@ -1,0 +1,3 @@
+*.pdb
+raylib.h.pch
+*.exe
