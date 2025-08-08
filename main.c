@@ -22,20 +22,24 @@ void updatePlayer(Player *player, Obstacle obstacles[], int obstaclesLength,
                   float delta);
 
 int main(int argv, char **argc) {
-  printf("Hello raylib");
-
-  InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "Hello Raylib");
+  InitWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "CINEMA");
   SetTargetFPS(60);
   Player player = {0};
   player.rect = (Rectangle){0, 0, 20.0f, 20.0f};
   player.direction = 0;
 
+  Image saul = LoadImage("res/lol.png");
+  SetWindowIcon(saul);
+
+  SetWindowState(FLAG_WINDOW_RESIZABLE);
+
   Obstacle obstacles[] = {
-      {{300, 250, 100, 50}, BLACK},  {{300, 250, 90, 40}, YELLOW},
+      {{10, 50, 5, 50}, BLACK},      {{300, 250, 90, 40}, YELLOW},
       {{600, 350, 100, 300}, LIME},  {{690, 420, 500, 100}, GOLD},
       {{120, 90, 200, 450}, PURPLE}, {{420, 69, 30, 30}, MAROON},
   };
   int obstaclesLength = sizeof(obstacles) / sizeof(obstacles[0]);
+  SetClipboardText("Ich mag FUTA");
 
   while (!WindowShouldClose()) {
     float delta = GetFrameTime();
@@ -54,6 +58,7 @@ int main(int argv, char **argc) {
     DrawRectangleRec(playrect, RED);
     EndDrawing();
   }
+  UnloadImage(saul);
   CloseWindow();
 }
 
@@ -84,7 +89,6 @@ void updatePlayer(Player *player, Obstacle obstacles[], int obstaclesLength,
   }
 
   bool hitObstacle = false;
-  Rectangle *hitter;
 
   for (int i = 0; i < obstaclesLength; i++) {
     if (player->rect.x < obstacles[i].rect.x + obstacles[i].rect.width) {
@@ -92,7 +96,6 @@ void updatePlayer(Player *player, Obstacle obstacles[], int obstaclesLength,
       Rectangle *p = &(player->rect);
       if (checkCollisionRect(*p, *oi)) {
         hitObstacle = true;
-        memcpy(hitter, oi, sizeof(Rectangle));
         break;
       }
     }
@@ -102,22 +105,19 @@ void updatePlayer(Player *player, Obstacle obstacles[], int obstaclesLength,
     player->rect.x = dx;
     player->rect.y = dy;
   } else {
-
-    while (!checkCollisionRect(player->rect, *hitter)) {
-      switch (player->direction) {
-      case LEFT: {
-        player->rect.x -= 10;
-      } break;
-      case RIGHT: {
-        player->rect.x += 10;
-      } break;
-      case UP: {
-        player->rect.y -= 10;
-      } break;
-      case DOWN: {
-        player->rect.y += 10;
-      } break;
-      }
+    switch (player->direction) {
+    case LEFT: {
+      player->rect.x += 0.5f;
+    } break;
+    case RIGHT: {
+      player->rect.x -= 0.5f;
+    } break;
+    case UP: {
+      player->rect.y += 0.5f;
+    } break;
+    case DOWN: {
+      player->rect.y -= 0.5f;
+    } break;
     }
   }
 }
